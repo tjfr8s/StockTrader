@@ -3,6 +3,8 @@ import pickle
 import requests
 
 def save_sp500_tickers():
+    """Get list of sp500 tickers from wikipedia using beautiful soup"""
+    
     resp = requests.get('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
     soup = bs.BeautifulSoup(resp.text, "lxml")
     table = soup.find('table', {'class' :  'wikitable sortable'})
@@ -16,5 +18,6 @@ def save_sp500_tickers():
 
     print(tickers)
     return tickers
+
 
 save_sp500_tickers()
