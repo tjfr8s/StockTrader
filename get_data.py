@@ -9,9 +9,17 @@ import pandas_datareader.data as web
 
 style.use('ggplot')
 
-start = dt.datetime(2000,1,1)
-end = dt.datetime(2018,7,30)
+df = pd.read_csv('tsla.csv', parse_dates = True, index_col = 0)
+df.drop(["AdjOpen", "ExDividend", "SplitRatio", "AdjHigh",
+         "AdjVolume"], axis = 1, inplace = True)
+df['100ma'] = df['AdjClose'].rolling(window=100, min_periods=0).mean()
+print(df.head())
 
-df = web.DataReader('TSLA', 'quandl', start, end)
+ax1 = plt.subplot2grid((6, 1), (0,0), rowspan = 5, colspan = 1)
+ax2 = plt.subplot2grid((6, 1), (5,0), rowspan = 1, colspan = 1, sharex = ax1)
 
-print(df.tail(6))
+ax1.plot(df.index, df['AdjClose'])
+ax1.plot(df.index, df['100ma'])
+ax2.bar(df.index, df['Volume'])
+
+plt.show()
